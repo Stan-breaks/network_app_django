@@ -1,10 +1,11 @@
+import json
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect,JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
+from .models import User,Post,Comment
 
 
 def index(request):
@@ -61,3 +62,18 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
+
+
+def post(request):
+    if request.method=='POST':
+        data= json.loads(request.body)
+        text=data.get("text")
+        if text=='':
+            return JsonResponse({"error":"Post is empty"},status=400)
+        post=Post(user=request.user,text=text)
+        post.save()
+        return JsonResponse({"message":"Post was successful"},status=200)
+    else:
+        posts=Post.objects.all()
+        posts=posts.order_by("-timestamp").all()
+        return JsonResponse([post.serialize() for post in posts],safe=False)
