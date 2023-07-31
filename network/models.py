@@ -5,16 +5,18 @@ from django.db import models
 class User(AbstractUser):
     pass
 class Post(models.Model):
-    user=user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="emails")
+    user= models.ForeignKey("User", on_delete=models.CASCADE, related_name="emails")
     text=models.TextField(blank=True)
     likes=models.IntegerField(default=0)
     timestamp = models.DateTimeField(auto_now_add=True)
+
     def serialize(self):
         return{
-            "self":self.id,
-            "user":self.user,
+            "id":self.id,
+            "user":self.user.username,
+            "text":self.text,
             "likes":self.likes,
-            "timestamp":self.timestamp
+            "timestamp":self.timestamp.strftime("%b %d %Y, %I:%M %p")
         }
 
 class Comment(models.Model):

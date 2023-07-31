@@ -1,16 +1,18 @@
-{% extends "network/layout.html" %}
 
+{% extends "network/layout.html" %}
+{%load static%}
 {% block body %}
  <h1>All posts</h1>
 <div id="newposts">
     <h3>New post</h3>
-    <form action="{%url 'post'%}" method="post">
-        {%csrf_token%}
-        <textarea id="text" rows="2" cols="50"></textarea></br>
-        <button type="submit" class="btn btn-primary">Post</button>
+    <form>
+        <textarea class="form-control" id="text" rows="2" cols="50"></textarea></br>
+        <input type="submit" class="btn btn-primary" value="Post" id="btn" data-url="{% url 'post'%}"/>
     </form>
 </div> 
-    <div id="Posts">
+    <div id="posts" data-url="{%url 'post'%}">
 
     </div>
+    <script src="{% static 'network/index.js'%}"></script>
+    <script src="https://kit.fontawesome.com/1f6e959c10.js" crossorigin="anonymous"></script>
 {% endblock %}

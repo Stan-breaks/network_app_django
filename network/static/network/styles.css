@@ -1,3 +1,25 @@
 body{
     margin-left: 20px;
+    
+}
+#newposts{
+    border: 1px solid rgb(158, 157, 157);
+    padding: 20px;
+}
+.post{
+    border: 1px solid rgb(160, 160, 160);
+    margin-top: 10px;
+    padding: 20px;
+}
+h1{
+    margin-left: -8px;
+}
+.time{
+    color:gray;
+}
+.comment{
+    color:gray;
+}
+.fas{
+    color: red;
 }
