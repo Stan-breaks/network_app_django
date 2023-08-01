@@ -57,6 +57,6 @@ function comment(){
         })
         }
     });
-});
+};
 
 document.addEventListener('DOMContentLoaded',load());
