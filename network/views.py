@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import User,Post,Comment
+from .models import User,Post,Comment,Like
 
 
 def index(request):
@@ -80,3 +80,11 @@ def post(request):
         posts=Post.objects.all()
         posts=posts.order_by("-timestamp").all()
         return JsonResponse([post.serialize() for post in posts],safe=False)
+
+@login_required
+def comment(request,post_id):
+    comment=Comment.objects.get(post=post_id)
+
+@login_required
+def like(request,post_id):
+    like=Like.objects.get(post=post_id)
