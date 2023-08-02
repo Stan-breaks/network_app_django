@@ -16,13 +16,12 @@ function load(){
             <p>${post.text}</p>
             <p class="time">${post.timestamp}</p>
             <p><i class="fas fa-heart"></i> ${post.likes}</p>
-            <p class="comment"onClick="${load_comments}">Comment</p>
-            <div class="commentsection" style="display:none;">
-            <form>
-            <input autofocus=True data-url="{%url 'comment'${post.id}%}" onKeyDown="${comment}" type="text"/>
+            <p class="comment">Comment</p>
+            <form  data-url="{%url 'comment'${post.id}%}" onSubmit="comment">
+            <input type="text"/>
+            <input type="submit" value="Submit Comment" />
             </form>
-            <ul>${comments}</ul>
-            </div>
+            <ul>${post.comments}</ul>
             </div>
             `);
     }).join('');
@@ -30,6 +29,7 @@ function load(){
         posts.innerHTML=postHtml;
     });
 }
+
 document.querySelector('#btn').addEventListener('click',(event)=>{
     event.preventDefault();
 fetch(event.target.dataset.url,{
@@ -45,17 +45,9 @@ fetch(event.target.dataset.url,{
 load();
 document.querySelector('#text').value='';
 });
-function load_comments(event){
-console.log(event)
-};
+
 function comment(event){
-        if(event.key==='Enter'){
-        fetch(event.target.dataset.url,{
-            method :'POST',
-            body: JSON.stringify({
-                commenttext:event.target.value
-            })
-        })
-}
+    event.preventDefault();
+    console.log("comment");
 }
 document.addEventListener('DOMContentLoaded',load());

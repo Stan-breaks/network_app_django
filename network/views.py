@@ -83,7 +83,14 @@ def post(request):
 
 @login_required
 def comment(request,post_id):
-    comment=Comment.objects.get(post=post_id)
+    post=Post.objects.get(id=post_id)
+    data=json.loads(request.body)
+    commenttext=data.get("commenttext")
+    if commenttext=='':
+            return JsonResponse({"error":"Post is empty"},status=400)
+    comment=Comment(post=post,commenttext=commenttext)
+    comment.save()
+    return JsonResponse({"message":"comment was successful"})
 
 @login_required
 def like(request,post_id):
