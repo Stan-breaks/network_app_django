@@ -4,22 +4,22 @@ function load(){
     .then(response=>response.json())
     .then(result=>{
        let postHtml=result.map(post=>{
-        comments=post.comments.map(comment=>`
+        var comments=post.comments.map(comment=>`
             <li>
             <span> ${comment.user} </span><span> ${comment.commenttext} </span><span> ${comment.timestamp} </span>
             </li>
         `).join('');
         return(`
             <div class="post">
-0            <h3><strong>${post.user}</strong></h3>
+           <h3><strong>${post.user}</strong></h3>
             <a href="#">Edit</a>
             <p>${post.text}</p>
             <p class="time">${post.timestamp}</p>
             <p><i class="fas fa-heart"></i> ${post.likes}</p>
-            <p onClick="comment">Comment</p>
-            <div id="commentsection" style="display:none;">
+            <p class="comment"onClick="${load_comments}">Comment</p>
+            <div class="commentsection" style="display:none;">
             <form>
-            <input autofocus=True data-url="{%url 'comment'${post.id}%}"id="commenttext" type="text"/>
+            <input autofocus=True data-url="{%url 'comment'${post.id}%}" onKeyDown="${comment}" type="text"/>
             </form>
             <ul>${comments}</ul>
             </div>
@@ -45,9 +45,10 @@ fetch(event.target.dataset.url,{
 load();
 document.querySelector('#text').value='';
 });
-function comment(){
-    document.querySelector('#commentsection').style.display='block';
-    document.querySelector('#commenttext').addEventListener('keydown',(event)=>{
+function load_comments(event){
+console.log(event)
+};
+function comment(event){
         if(event.key==='Enter'){
         fetch(event.target.dataset.url,{
             method :'POST',
@@ -55,8 +56,6 @@ function comment(){
                 commenttext:event.target.value
             })
         })
-        }
-    });
-};
-
+}
+}
 document.addEventListener('DOMContentLoaded',load());

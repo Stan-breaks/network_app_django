@@ -17,8 +17,9 @@ h1{
 .time{
     color:gray;
 }
-#comment{
+.comment{
     color:gray;
+    cursor: pointer;
 }
 .fas{
     color: red;
