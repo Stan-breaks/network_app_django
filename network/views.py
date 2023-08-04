@@ -109,26 +109,20 @@ def account(request):
    if request.method!='POST':
        accounts=Account.objects.all()
        return JsonResponse([account.serialize() for account in accounts],safe=False) 
-      
+@csrf_exempt      
 @login_required     
 def follow(request,username):
     user=request.user
     followeduser=User.objects.get(username=username)
     useraccount=Account.objects.get(user=user)
     followedaccount=Account.objects.get(user=followeduser)
-    useraccount.following.add(followedaccount)
-    followedaccount.follower.add(useraccount)
+    if user.username in followedaccount.follower.values_list('username',flat=True):
+        useraccount.following.remove(followeduser)
+        followedaccount.follower.remove(user)
+        return JsonResponse({'message':'Unfollow successful'})
+    useraccount.following.add(followeduser)
+    followedaccount.follower.add(user)
     return JsonResponse({'message':'Follow successful'})
-
-@login_required     
-def unfollow(request,username):
-    user=request.user
-    followeduser=User.objects.get(username=username)
-    useraccount=Account.objects.get(user=user)
-    followedaccount=Account.objects.get(user=followeduser)
-    useraccount.following.remove(followedaccount)
-    followedaccount.follower.remove(useraccount)
-    return JsonResponse({'message':'Unfollow successful'})
 
 @login_required
 def profile(request,username):
