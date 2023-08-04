@@ -118,8 +118,17 @@ def get_account(request,username):
 
 @login_required
 def profile(request,username):
+    user=User.objects.get(username=username)
+    account=Account.objects.get(user=user)
+    posts=Post.objects.filter(user=user).order_by("-timestamp").all()
+    serialized_posts=[post.serialize() for post in posts]
     return render(request,"network/profile.html",{
-        "username":username
+        "username":username,
+        "followers":account.follower.count(),
+        "following":account.following.count(),
+        "posts":serialized_posts,
+        "isuser":username==request.user.username,
+        "isfollow":user.username in account.follower.values_list('username',flat=True)
     })
 
 

@@ -8,7 +8,7 @@ function load(){
         let likeUrl = `"{% url 'like' ${post.id} %}"`;
         return(`
             <div class="post">
-            <h3><a href={%url 'profile'${post.user}%}<strong>${post.user}</strong></h3>
+            <h3><a href="profile/${post.user}"<strong>${post.user}</strong></h3>
             <a href="#">Edit</a>
             <p>${post.text}</p>
             <p class="time">${post.timestamp}</p>

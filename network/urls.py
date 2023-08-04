@@ -12,5 +12,5 @@ urlpatterns = [
     path("account",views.account,name="account"),
     path("account/<str:username>",views.get_account,name='getaccount'),
     path("like/<int:post_id>",views.like,name='like'),
-    path("profile/<int:user_id>",views.profile,name='profile')
+    path("profile/<str:username>",views.profile,name='profile')
 ]
