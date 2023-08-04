@@ -1,0 +1,14 @@
+{%extends 'network/layout.html'%}
+{%block body%}
+<h2>Following</h2>
+<div id="posts">
+    {%for post in posts %}
+    <div class="post">
+        <h3><a href="{%url 'profile' post.user%}"><strong>{{post.user}}</strong></a></h3>
+        <p>{{post.text}}</p>
+        <p class="time">{{post.timestamp}}</p>
+        <p><i class="fas fa-heart"></i> {{post.likes}}</p>
+    </div>
+    {%endfor%}
+    <script src="https://kit.fontawesome.com/1f6e959c10.js" crossorigin="anonymous"></script>
+{%endblock%}

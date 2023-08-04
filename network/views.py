@@ -108,7 +108,8 @@ def like(request,post_id):
 def account(request):
    if request.method!='POST':
        accounts=Account.objects.all()
-       return JsonResponse([account.serialize() for account in accounts],safe=False) 
+       return JsonResponse([account.serialize() for account in accounts],safe=False)
+    
 @csrf_exempt      
 @login_required     
 def follow(request,username):
@@ -136,9 +137,22 @@ def profile(request,username):
         "following":account.following.count(),
         "posts":serialized_posts,
         "isuser":username==request.user.username,
-        "isfollow":user.username in account.follower.values_list('username',flat=True)
+        "isfollow":request.user.username in account.follower.values_list('username',flat=True)
     })
 
+@login_required
+def following(request):
+    user=request.user
+    account=Account.objects.get(user=user)
+    posts=[]
+    for accountuser in account.following.all():
+        user_posts = Post.objects.filter(user=accountuser)
+        posts.extend(user_posts)
+    sorted_posts = sorted(posts, key=lambda post: post.timestamp, reverse=True)
+    serialized_posts=[post.serialize() for post in sorted_posts]
+    return render(request,'network/following.html',{
+        "posts":serialized_posts
+    })
 
 
 

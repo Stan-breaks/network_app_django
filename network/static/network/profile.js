@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded',()=>{
         .then(result=>{
             console.log(result)
         })
-        location.reload()
+        setTimeout(function() {
+            location.reload();
+        }, 1000);
     })
 })

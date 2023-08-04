@@ -31,8 +31,8 @@ fetch(event.target.dataset.url,{
 .then(response=>response.json())
 .then(result=>{
     console.log(result);
+    load();
 });
-load();
 document.querySelector('#text').value='';
 });
 
