@@ -6,7 +6,7 @@ class User(AbstractUser):
     pass
 
 class Post(models.Model):
-    user= models.ForeignKey("User", on_delete=models.CASCADE, related_name="emails")
+    user= models.ForeignKey(User, on_delete=models.CASCADE, related_name="emails")
     text=models.TextField(blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
@@ -28,7 +28,12 @@ class Like(models.Model):
     user=models.ManyToManyField(User,blank=False,related_name='likedUser')
     liked=models.BooleanField(default=False)
 
-class Follower(models.Model):
+class Account(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE, related_name="followed_user")
-    followers=models.ManyToManyField(User,blank=False,related_name='following_user')
+    follower=models.ManyToManyField(User,blank=False,related_name='following_user')
+    def serialize(self):
+        return{
+            "user":self.user.username,
+            "follower":[follower.username for follower in self.follower.all()]
+        }
 

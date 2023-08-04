@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import User,Post,Like
+from .models import User,Post,Like,Account
 
 
 def index(request):
@@ -56,6 +56,8 @@ def register(request):
         try:
             user = User.objects.create_user(username, email, password)
             user.save()
+            account=Account.objects.create(user=user)
+            account.save()
         except IntegrityError:
             return render(request, "network/register.html", {
                 "message": "Username already taken."
@@ -85,7 +87,7 @@ def post(request):
 @login_required
 def like(request,post_id):   
     if request.method!='POST':
-        return JsonResponse[{'ERROR':'fuckery detected'}]
+        return JsonResponse({'ERROR':'fuckery detected'})
     post=Post.objects.get(pk=post_id)
     user=request.user
     try:
@@ -101,9 +103,15 @@ def like(request,post_id):
         likes.delete()
         return JsonResponse({'message':'Unliked'})
 
+def account(request):
+   if request.method!='POST':
+       accounts=Account.objects.all()
+       return JsonResponse([account.serialize() for account in accounts],safe=False)    
+
 @login_required
 def profile(request,user_id):
-    pass
+    return render(request,"network/profile.html")
+
 
 
 
