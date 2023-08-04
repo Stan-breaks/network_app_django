@@ -20,7 +20,7 @@
         <a href="#">Edit</a>
         <p>{{post.text}}</p>
         <p class="time">{{post.timestamp}}</p>
-        <p><i class="fas fa-heart"></i> {{post.likes}}</p>
+        <p><i class="fas fa-heart" data-url="{% url 'like' post.id %}"></i> {{post.likes}}</p>
     </div>
     {%endfor%}
 </div>
