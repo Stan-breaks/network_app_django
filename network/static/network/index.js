@@ -5,7 +5,6 @@ function load(){
     .then(response=>response.json())
     .then(result=>{
        let postHtml=result.map(post=>{
-        let likeUrl = `"{% url 'like' ${post.id} %}"`;
         return(`
             <div class="post">
             <h3><a href="profile/${post.user}"<strong>${post.user}</strong></h3>

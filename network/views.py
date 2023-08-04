@@ -110,11 +110,25 @@ def account(request):
        accounts=Account.objects.all()
        return JsonResponse([account.serialize() for account in accounts],safe=False) 
       
-def get_account(request,username):
-    user=User.objects.get(username=username)
-    account=Account.objects.get(user=user)
-    return JsonResponse(account.serialize())
+@login_required     
+def follow(request,username):
+    user=request.user
+    followeduser=User.objects.get(username=username)
+    useraccount=Account.objects.get(user=user)
+    followedaccount=Account.objects.get(user=followeduser)
+    useraccount.following.add(followedaccount)
+    followedaccount.follower.add(useraccount)
+    return JsonResponse({'message':'Follow successful'})
 
+@login_required     
+def unfollow(request,username):
+    user=request.user
+    followeduser=User.objects.get(username=username)
+    useraccount=Account.objects.get(user=user)
+    followedaccount=Account.objects.get(user=followeduser)
+    useraccount.following.remove(followedaccount)
+    followedaccount.follower.remove(useraccount)
+    return JsonResponse({'message':'Unfollow successful'})
 
 @login_required
 def profile(request,username):
