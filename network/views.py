@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import User,Post,Comment,Like
+from .models import User,Post,Like
 
 
 def index(request):
@@ -81,17 +81,35 @@ def post(request):
         posts=posts.order_by("-timestamp").all()
         return JsonResponse([post.serialize() for post in posts],safe=False)
 
+@csrf_exempt
 @login_required
-def comment(request,post_id):
-    post=Post.objects.get(id=post_id)
-    data=json.loads(request.body)
-    commenttext=data.get("commenttext")
-    if commenttext=='':
-            return JsonResponse({"error":"Post is empty"},status=400)
-    comment=Comment(post=post,commenttext=commenttext)
-    comment.save()
-    return JsonResponse({"message":"comment was successful"})
+def like(request,post_id):   
+    if request.method!='POST':
+        return JsonResponse[{'ERROR':'fuckery detected'}]
+    post=Post.objects.get(pk=post_id)
+    user=request.user
+    try:
+        likes=Like.objects.get(post=post,user=request.user)
+    except Like.DoesNotExist:
+        likes=None
+    if not likes:
+        likes=Like.objects.create(post=post,liked=True)
+        likes.user.add(user)
+        return JsonResponse({'message':'Liked'})
+    else:
+        likes.user.remove(user)
+        likes.delete()
+        return JsonResponse({'message':'Unliked'})
 
 @login_required
-def like(request,post_id):
-    like=Like.objects.get(post=post_id)
+def profile(request,user_id):
+    pass
+
+
+
+
+
+
+
+
+

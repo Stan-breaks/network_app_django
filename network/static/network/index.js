@@ -1,27 +1,18 @@
+
 function load(){
     const posts=document.querySelector('#posts');
     fetch(posts.dataset.url)
     .then(response=>response.json())
     .then(result=>{
        let postHtml=result.map(post=>{
-        var comments=post.comments.map(comment=>`
-            <li>
-            <span> ${comment.user} </span><span> ${comment.commenttext} </span><span> ${comment.timestamp} </span>
-            </li>
-        `).join('');
+        let likeUrl = `"{% url 'like' ${post.id} %}"`;
         return(`
             <div class="post">
            <h3><strong>${post.user}</strong></h3>
             <a href="#">Edit</a>
             <p>${post.text}</p>
             <p class="time">${post.timestamp}</p>
-            <p><i class="fas fa-heart"></i> ${post.likes}</p>
-            <p class="comment">Comment</p>
-            <form  data-url="{%url 'comment'${post.id}%}" onSubmit="comment">
-            <input type="text"/>
-            <input type="submit" value="Submit Comment" />
-            </form>
-            <ul>${post.comments}</ul>
+            <p><i class="fas fa-heart" onClick="like(event,${post.id})"></i> ${post.likes}</p>
             </div>
             `);
     }).join('');
@@ -29,7 +20,7 @@ function load(){
         posts.innerHTML=postHtml;
     });
 }
-
+var liked;
 document.querySelector('#btn').addEventListener('click',(event)=>{
     event.preventDefault();
 fetch(event.target.dataset.url,{
@@ -46,8 +37,17 @@ load();
 document.querySelector('#text').value='';
 });
 
-function comment(event){
-    event.preventDefault();
-    console.log("comment");
+document.addEventListener('DOMContentLoaded',load);
+function like(event,post_id){
+    fetch(`like/${post_id}`,{
+        method:'POST',
+        body:JSON.stringify({
+            liked:liked
+        })
+    })
+    .then(response=>response.json())
+    .then(result=>{
+        console.log(result)
+        load()
+    });
 }
-document.addEventListener('DOMContentLoaded',load());
