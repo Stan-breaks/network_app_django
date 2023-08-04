@@ -29,11 +29,13 @@ class Like(models.Model):
     liked=models.BooleanField(default=False)
 
 class Account(models.Model):
-    user=models.ForeignKey(User,on_delete=models.CASCADE, related_name="followed_user")
+    user=models.ForeignKey(User,on_delete=models.CASCADE, related_name="account_user")
     follower=models.ManyToManyField(User,blank=False,related_name='following_user')
+    following=models.ManyToManyField(User,blank=False,related_name='followed_user')
     def serialize(self):
         return{
             "user":self.user.username,
-            "follower":[follower.username for follower in self.follower.all()]
+            "follower":[follower.username for follower in self.follower.all()],
+            "following":[following.username for following in self.following.all()]
         }
 

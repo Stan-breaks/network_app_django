@@ -68,16 +68,18 @@ def register(request):
         return render(request, "network/register.html")
 
 @csrf_exempt
-@login_required
 def post(request):
     if request.method=='POST':
-        data= json.loads(request.body)
-        text=data.get("text")
-        if text=='':
-            return JsonResponse({"error":"Post is empty"},status=400)
-        post=Post(user=request.user,text=text)
-        post.save()
-        return JsonResponse({"message":"Post was successful"},status=200)
+        if request.user.is_authenticated:
+            data= json.loads(request.body)
+            text=data.get("text")
+            if text=='':
+              return JsonResponse({"error":"Post is empty"},status=400)
+            post=Post(user=request.user,text=text)
+            post.save()
+            return JsonResponse({"message":"Post was successful"},status=200)
+        else:
+            return JsonResponse({'error':'you need to login'})
     else:
         posts=Post.objects.all()
         posts=posts.order_by("-timestamp").all()
@@ -106,11 +108,19 @@ def like(request,post_id):
 def account(request):
    if request.method!='POST':
        accounts=Account.objects.all()
-       return JsonResponse([account.serialize() for account in accounts],safe=False)    
+       return JsonResponse([account.serialize() for account in accounts],safe=False) 
+      
+def get_account(request,username):
+    user=User.objects.get(username=username)
+    account=Account.objects.get(user=user)
+    return JsonResponse(account.serialize())
+
 
 @login_required
-def profile(request,user_id):
-    return render(request,"network/profile.html")
+def profile(request,username):
+    return render(request,"network/profile.html",{
+        "username":username
+    })
 
 
 
