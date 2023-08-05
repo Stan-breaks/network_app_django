@@ -7,8 +7,7 @@ function load(){
        let postHtml=result.map(post=>{
         return(`
             <div class="post">
-            <h3><a href="profile/${post.user}"<strong>${post.user}</strong></h3>
-            <a href="#">Edit</a>
+            <h3><a href="profile/${post.user}"<strong>${post.user}</strong></a></h3>
             <p>${post.text}</p>
             <p class="time">${post.timestamp}</p>
             <p><i class="fas fa-heart" onClick="like(event,${post.id})"></i> ${post.likes}</p>

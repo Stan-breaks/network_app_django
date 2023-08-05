@@ -17,7 +17,6 @@
 <div id="posts">
     {%for post in posts %}
     <div class="post">
-        <a href="#">Edit</a>
         <p>{{post.text}}</p>
         <p class="time">{{post.timestamp}}</p>
         <p><i class="fas fa-heart" data-url="{% url 'like' post.id %}"></i> {{post.likes}}</p>
