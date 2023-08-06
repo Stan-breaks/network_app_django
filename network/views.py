@@ -6,6 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect,JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import get_object_or_404
 
 from .models import User,Post,Like,Account
 
@@ -73,7 +74,7 @@ def post(request):
         if request.user.is_authenticated:
             data= json.loads(request.body)
             text=data.get("text")
-            if text=='':
+            if not text:
               return JsonResponse({"error":"Post is empty"},status=400)
             post=Post(user=request.user,text=text)
             post.save()
@@ -127,8 +128,8 @@ def follow(request,username):
 
 @login_required
 def profile(request,username):
-    user=User.objects.get(username=username)
-    account=Account.objects.get(user=user)
+    user = get_object_or_404(User, username=username)
+    account = get_object_or_404(Account, user=user)
     posts=Post.objects.filter(user=user).order_by("-timestamp").all()
     serialized_posts=[post.serialize() for post in posts]
     return render(request,"network/profile.html",{
@@ -151,7 +152,7 @@ def following(request):
     sorted_posts = sorted(posts, key=lambda post: post.timestamp, reverse=True)
     serialized_posts=[post.serialize() for post in sorted_posts]
     return render(request,'network/following.html',{
-        "posts":serialized_posts
+        "posts":serialized_posts,
     })
 
 
