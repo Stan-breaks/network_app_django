@@ -1,7 +1,8 @@
 
 function load(){
     const posts=document.querySelector('#posts');
-    fetch(posts.dataset.url)
+    console.log(posts.dataset.page)
+    fetch(`${posts.dataset.url}?page=${parseInt(posts.dataset.page)}`)
     .then(response=>response.json())
     .then(result=>{
        let postHtml=result.map(post=>{
@@ -15,9 +16,10 @@ function load(){
             `);
     }).join('');
         console.log(postHtml);
-        posts.innerHTML=postHtml;
+        posts.innerHTML+=postHtml;
     });
 }
+
 var liked;
 document.querySelector('#btn').addEventListener('click',(event)=>{
     event.preventDefault();
@@ -34,7 +36,11 @@ fetch(event.target.dataset.url,{
 });
 document.querySelector('#text').value='';
 });
-
+function nextpage(){
+    var post=document.querySelector('#posts')
+    var page=parseInt(post.dataset.page)+1
+    post.dataset.page=page
+}
 document.addEventListener('DOMContentLoaded',load);
 function like(event,post_id){
     fetch(`like/${post_id}`,{
@@ -48,4 +54,11 @@ function like(event,post_id){
         console.log(result)
         load()
     });
+    window.onscroll=()=>{
+        if(window.scrollY+window.innerHeight>=document.body.offsetHeight){
+            if(document.querySelector('#posts').dataset.page<2){
+                document.querySelector('#posts').innerHTML+=`<button class="btn btn-primary" onclick="nextpage()">See more</button>`
+            }
+        }
+       }
 }

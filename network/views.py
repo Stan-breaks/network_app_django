@@ -7,6 +7,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
+from django.core.paginator import Paginator
 
 from .models import User,Post,Like,Account
 
@@ -84,11 +85,14 @@ def post(request):
     else:
         posts=Post.objects.all()
         posts=posts.order_by("-timestamp").all()
-        return JsonResponse([post.serialize() for post in posts],safe=False)
+        paginator=Paginator(posts,5)
+        pagenumber=(request.GET.get('page')or 1)
+        page_obj=paginator.get_page(pagenumber)
+        return JsonResponse([post.serialize() for post in page_obj],safe=False)
 
 @csrf_exempt
 @login_required
-def like(request,post_id):   
+def like(request,post_id):
     if request.method!='POST':
         return JsonResponse({'ERROR':'fuckery detected'})
     post=Post.objects.get(pk=post_id)
