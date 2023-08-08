@@ -13,7 +13,14 @@ from .models import User,Post,Like,Account
 
 
 def index(request):
-    return render(request, "network/index.html")
+    posts=Post.objects.all()
+    posts=posts.order_by("-timestamp").all()
+    serializedposts=[post.serialize() for post in posts]
+    return render(request,'network/index.html',{
+        "posts":serializedposts,
+        "ispost":request.user
+    })
+    
 
 
 def login_view(request):
@@ -84,8 +91,8 @@ def post(request):
             return JsonResponse({'error':'you need to login'})
     else:
         posts=Post.objects.all()
-        posts=posts.order_by("-timestamp").all()
         return JsonResponse([post.serialize() for post in posts],safe=False)
+
 
 @csrf_exempt
 @login_required

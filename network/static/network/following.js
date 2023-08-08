@@ -1,4 +1,4 @@
-document.addEventListener('click',()=>{
+
     function like(url){
         fetch(url,{
             method:'POST',
@@ -21,4 +21,3 @@ document.addEventListener('click',()=>{
             like(likeurl)
         });
     });
-})

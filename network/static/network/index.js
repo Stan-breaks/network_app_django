@@ -1,26 +1,4 @@
 
-function load(){
-    const posts=document.querySelector('#posts');
-    console.log(posts.dataset.page)
-    fetch(posts.dataset.url)
-    .then(response=>response.json())
-    .then(result=>{
-       let postHtml=result.map(post=>{
-        return(`
-            <div class="post">
-            <h3><a href="profile/${post.user}"<strong>${post.user}</strong></a></h3>
-            <p>${post.text}</p>
-            <p class="time">${post.timestamp}</p>
-            <p><i class="fas fa-heart" onClick="like(event,${post.id})"></i> ${post.likes}</p>
-            </div>
-            `);
-    }).join('');
-        console.log(postHtml);
-        posts.innerHTML+=postHtml;
-    });
-}
-
-var liked;
 document.querySelector('#btn').addEventListener('click',(event)=>{
     event.preventDefault();
 fetch(event.target.dataset.url,{
@@ -32,21 +10,30 @@ fetch(event.target.dataset.url,{
 .then(response=>response.json())
 .then(result=>{
     console.log(result);
-    load();
+    location.reload();
 });
 document.querySelector('#text').value='';
 });
-document.addEventListener('DOMContentLoaded',load);
-function like(event,post_id){
-    fetch(`like/${post_id}`,{
+
+function like(url){
+    fetch(url,{
         method:'POST',
         body:JSON.stringify({
-            liked:liked
+            liked:true
         })
     })
     .then(response=>response.json())
     .then(result=>{
         console.log(result)
-        load()
-    }); 
+        setTimeout(function() {
+            location.reload();
+        }, 500);
+    });
 }
+const heartIcons = document.querySelectorAll(".fas");
+heartIcons.forEach(icon => {
+    icon.addEventListener("click",(event)=>{
+        const likeurl= event.target.dataset.url;
+        like(likeurl)
+    });
+});

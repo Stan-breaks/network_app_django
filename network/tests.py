@@ -53,6 +53,7 @@ class SocialTestCase(TestCase):
         c=Client()
         response=c.get('')
         self.assertEqual(response.status_code,200)
+        self.assertEqual(len(response.context['posts']), 2)
     
     def test_following_page(self):
         self.client.login(username='peter', password='123456')
