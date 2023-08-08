@@ -85,10 +85,7 @@ def post(request):
     else:
         posts=Post.objects.all()
         posts=posts.order_by("-timestamp").all()
-        paginator=Paginator(posts,5)
-        pagenumber=(request.GET.get('page')or 1)
-        page_obj=paginator.get_page(pagenumber)
-        return JsonResponse([post.serialize() for post in page_obj],safe=False)
+        return JsonResponse([post.serialize() for post in posts],safe=False)
 
 @csrf_exempt
 @login_required
