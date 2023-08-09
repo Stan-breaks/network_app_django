@@ -10,9 +10,10 @@ fetch(event.target.dataset.url,{
 .then(response=>response.json())
 .then(result=>{
     console.log(result);
-    location.reload();
 });
-document.querySelector('#text').value='';
+setTimeout(function() {
+    location.reload();
+}, 500);
 });
 
 function like(url){
@@ -25,10 +26,10 @@ function like(url){
     .then(response=>response.json())
     .then(result=>{
         console.log(result)
-        setTimeout(function() {
-            location.reload();
-        }, 500);
     });
+    setTimeout(function() {
+        location.reload();
+    }, 500);
 }
 const heartIcons = document.querySelectorAll(".fas");
 heartIcons.forEach(icon => {
