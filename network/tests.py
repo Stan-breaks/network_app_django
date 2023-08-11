@@ -39,7 +39,7 @@ class SocialTestCase(TestCase):
         posts=Post.objects.all()
         self.assertEqual(posts.count(),2)
     
-    def text_account(self):
+    def test_account(self):
         accounts=Account.objects.all()
         self.assertEqual(accounts.count(),2)
     
