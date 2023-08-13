@@ -90,7 +90,7 @@ def post(request):
         else:
             return JsonResponse({'error':'you need to login'})
     else:
-        posts=Post.objects.all()
+        posts=Post.objects.all() 
         return JsonResponse([post.serialize() for post in posts],safe=False)
 
 
