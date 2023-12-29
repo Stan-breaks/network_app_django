@@ -17,7 +17,7 @@ pip install Django
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/yourusername/RestoConnect.git
+    git clone https://github.com/Stan-breaks/network_app_django.git
     ```
 2. Navigate to the project directory:
     ```bash
