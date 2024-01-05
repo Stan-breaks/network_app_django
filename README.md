@@ -23,13 +23,17 @@ pip install Django
     ```bash
     cd network_app_django
     ```
-3. Apply the migrations:
+3. Make migrations:
+ ```bash
+   python3 manage.py makemigrations
+```
+4. Apply the migrations:
     ```bash
-    python manage.py migrate
+    python3 manage.py migrate
     ```
-4. Run the server:
+5. Run the server:
     ```bash
-    python manage.py runserver
+    python3 manage.py runserver
     ```
 
 Now, you can access the website at `http://localhost:8000`.
