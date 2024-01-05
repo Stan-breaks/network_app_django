@@ -21,7 +21,7 @@ pip install Django
     ```
 2. Navigate to the project directory:
     ```bash
-    cd RestoConnect
+    cd network_app_django
     ```
 3. Apply the migrations:
     ```bash
@@ -34,11 +34,6 @@ pip install Django
 
 Now, you can access the website at `http://localhost:8000`.
 
-## Features
-
-- View restaurant menu
-- Make a reservation
-- Contact us form
 
 ## Contributing
 
